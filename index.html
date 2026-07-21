@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đang tải ứng dụng Navimaps...</title>
+    <title>Đang tải Navimaps...</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,42 +26,34 @@
 <body>
     <div class="container">
         <h2>Đang kết nối đến máy chủ...</h2>
-        <p>Hệ thống đang tự động tìm bản cài đặt APK mới nhất cho bạn.</p>
+        <p>Đang tự động tìm bản cài đặt APK mới nhất cho bạn.</p>
     </div>
 
     <script>
-        // Link Google Drive JSON trực tiếp của bạn
-        const DRIVE_JSON_URL = "https://drive.usercontent.google.com/u/0/uc?id=1iMki7SspQdKLT5HEZrGLjNbNCmZL0M4L&export=download";
-        
-        // Dùng proxy để vượt rào cản CORS của Google Drive
-        const PROXY_URL = "https://corsproxy.io/?" + encodeURIComponent(DRIVE_JSON_URL);
+        // Gọi thẳng API Release mới nhất từ GitHub của bạn
+        const GITHUB_API_URL = "https://api.github.com/repos/nhutvo2310/Navimaps/releases/latest";
 
-        fetch(PROXY_URL)
+        fetch(GITHUB_API_URL)
             .then(response => {
-                if (!response.ok) throw new Error("Không thể tải file cấu hình");
+                if (!response.ok) throw new Error("Không thể lấy dữ liệu từ GitHub");
                 return response.json();
             })
             .then(data => {
-                // Đọc thuộc tính "download_link" trong phần "android" từ file JSON
-                const apkUrl = data.android && data.android.download_link;
+                // Lọc danh sách file Assets để tìm file .apk có version mới nhất
+                const apkAsset = data.assets.find(asset => asset.name.endsWith('.apk'));
                 
-                if (apkUrl) {
-                    // Chuyển hướng người dùng sang link tải APK mới nhất
-                    window.location.href = apkUrl;
+                if (apkAsset && apkAsset.browser_download_url) {
+                    // Tự động tải trực tiếp file APK về điện thoại
+                    window.location.href = apkAsset.browser_download_url;
                 } else {
-                    document.querySelector('.container').innerHTML = 
-                        "<h3 style='color:red;'>Lỗi: Không thấy link tải APK trong file cấu hình!</h3>";
+                    // Nếu không tìm thấy file .apk nào, mở trang release
+                    window.location.href = data.html_url;
                 }
             })
             .catch(error => {
-                console.error("Lỗi đọc JSON:", error);
-                document.querySelector('.container').innerHTML = 
-                    "<h3>Có lỗi kết nối. Đang chuyển hướng đến trang tải dự phòng...</h3>";
-                
-                // Dự phòng: Chuyển hướng về trang Releases của GitHub nếu không đọc được Drive
-                setTimeout(() => {
-                    window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/latest";
-                }, 1500);
+                console.error("Lỗi:", error);
+                // Trường hợp hy hữu lỗi mạng, mở trang latest release
+                window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/latest";
             });
     </script>
 </body>
