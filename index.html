@@ -24,8 +24,11 @@
     </div>
 
     <script>
-        // Dán đường link Raw JSON bạn đã copy ở Bước 1 vào đây
-        const JSON_URL = "https://drive.usercontent.google.com/u/0/uc?id=1iMki7SspQdKLT5HEZrGLjNbNCmZL0M4L&export=download"; 
+        // Đường link Raw JSON gốc của bạn
+        const RAW_JSON = "https://drive.usercontent.google.com/u/0/uc?id=1iMki7SspQdKLT5HEZrGLjNbNCmZL0M4L&export=download";
+        
+        // Dùng Corsproxy để tránh bị trình duyệt chặn CORS
+        const JSON_URL = "https://corsproxy.io/?" + encodeURIComponent(RAW_JSON);
 
         fetch(JSON_URL)
             .then(response => {
@@ -33,19 +36,24 @@
                 return response.json();
             })
             .then(data => {
-                // Đọc đúng cấu trúc JSON của bạn: android -> download_link
+                // Đọc đúng cấu trúc JSON: android -> download_link
                 const apkUrl = data.android && data.android.download_link;
                 
                 if (apkUrl) {
-                    // Tự động chuyển hướng trình duyệt tới link tải APK
+                    // Tự động chuyển hướng tải file APK
                     window.location.href = apkUrl;
                 } else {
-                    document.body.innerHTML = "<h3>Lỗi: Không tìm thấy link tải ứng dụng trong cấu hình.</h3>";
+                    document.body.innerHTML = "<h3>Lỗi: Không tìm thấy link tải ứng dụng trong file cấu hình.</h3>";
                 }
             })
             .catch(error => {
                 console.error("Lỗi:", error);
-                document.body.innerHTML = "<h3>Có lỗi xảy ra khi kiểm tra bản cập nhật. Vui lòng thử lại sau!</h3>";
+                document.body.innerHTML = "<h3>Lỗi kết nối. Đang thử chuyển hướng trực tiếp...</h3>";
+                
+                // Backup: Nếu fetch JSON lỗi thì mở thẳng trang Releases của GitHub
+                setTimeout(() => {
+                    window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/latest";
+                }, 1500);
             });
     </script>
 </body>
