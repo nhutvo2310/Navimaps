@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đang tải ứng dụng Navimaps...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            background-color: #f4f4f9;
+        }
+        .loader {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <h2>Đang kết nối đến máy chủ...</h2>
+        <p>Hệ thống đang tự động tải bản ứng dụng mới nhất cho bạn.</p>
+    </div>
 
+    <script>
+        // Dán đường link Raw JSON bạn đã copy ở Bước 1 vào đây
+        const JSON_URL = "https://drive.usercontent.google.com/u/0/uc?id=1iMki7SspQdKLT5HEZrGLjNbNCmZL0M4L&export=download"; 
+
+        fetch(JSON_URL)
+            .then(response => {
+                if (!response.ok) throw new Error("Không thể đọc file JSON");
+                return response.json();
+            })
+            .then(data => {
+                // Đọc đúng cấu trúc JSON của bạn: android -> download_link
+                const apkUrl = data.android && data.android.download_link;
+                
+                if (apkUrl) {
+                    // Tự động chuyển hướng trình duyệt tới link tải APK
+                    window.location.href = apkUrl;
+                } else {
+                    document.body.innerHTML = "<h3>Lỗi: Không tìm thấy link tải ứng dụng trong cấu hình.</h3>";
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi:", error);
+                document.body.innerHTML = "<h3>Có lỗi xảy ra khi kiểm tra bản cập nhật. Vui lòng thử lại sau!</h3>";
+            });
+    </script>
+</body>
+</html>
