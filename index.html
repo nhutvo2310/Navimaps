@@ -6,7 +6,6 @@
     <title>Đang tải Navimaps...</title>
     <style>
         :root {
-            color-scheme: light;
             --bg: linear-gradient(180deg, #eef6ff 0%, #f9fbff 100%);
             --card: #ffffff;
             --text: #12324a;
@@ -44,7 +43,6 @@
             color: var(--accent);
             font-size: 13px;
             font-weight: 700;
-            letter-spacing: 0.02em;
         }
         h1 {
             margin: 0 0 10px;
@@ -65,23 +63,15 @@
         .actions {
             margin-top: 24px;
             display: none;
-            gap: 12px;
             justify-content: center;
-            flex-wrap: wrap;
         }
         .actions a {
             text-decoration: none;
             padding: 12px 18px;
             border-radius: 12px;
             font-weight: 600;
-        }
-        .primary {
             background: var(--accent);
-            color: #ffffff;
-        }
-        .secondary {
-            background: #edf4fb;
-            color: var(--text);
+            color: #fff;
         }
     </style>
 </head>
@@ -90,10 +80,9 @@
         <div class="badge">Navimaps S3 240</div>
         <h1>Đang tìm bản app mới nhất</h1>
         <p id="message">Vui lòng chờ một chút, hệ thống đang lấy file APK mới nhất.</p>
-        <div class="status" id="status">Đang kết nối GitHub...</div>
+        <div class="status" id="status">Đang kết nối...</div>
         <div class="actions" id="actions">
-            <a class="primary" id="downloadLink" href="https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240">Tải app</a>
-            <a class="secondary" href="https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240">Mở trang</a>
+            <a id="downloadLink" href="#">Tải app</a>
         </div>
     </main>
 
@@ -106,8 +95,8 @@
         const actionsEl = document.getElementById("actions");
         const downloadLinkEl = document.getElementById("downloadLink");
 
-        function showFallback(downloadUrl) {
-            if (downloadUrl) downloadLinkEl.href = downloadUrl;
+        function showDownload(url) {
+            downloadLinkEl.href = url;
             actionsEl.style.display = "flex";
         }
 
@@ -127,9 +116,8 @@
 
                 if (apkAssets.length === 0) {
                     statusEl.textContent = "Không tìm thấy file APK.";
-                    messageEl.textContent = "Trang release sẽ được mở để bạn chọn file thủ công.";
-                    showFallback(RELEASE_PAGE_URL);
-                    window.location.replace(RELEASE_PAGE_URL);
+                    messageEl.textContent = "Bấm nút bên dưới để mở trang tải.";
+                    showDownload(RELEASE_PAGE_URL);
                     return;
                 }
 
@@ -141,15 +129,14 @@
 
                 const latestApk = apkAssets[0];
                 statusEl.textContent = `Đang chuyển tới ${latestApk.name}...`;
-                messageEl.textContent = "Nếu điện thoại không tự tải, bạn có thể bấm nút tải app bên dưới.";
-                showFallback(latestApk.browser_download_url);
+                messageEl.textContent = "Nếu điện thoại không tự tải, bạn có thể bấm nút bên dưới.";
+                showDownload(latestApk.browser_download_url);
                 window.location.replace(latestApk.browser_download_url);
             })
-            .catch(error => {
-                console.error("Navimaps redirect error:", error);
+            .catch(() => {
                 statusEl.textContent = "Không thể tự động lấy bản mới nhất.";
-                messageEl.textContent = "Bạn vẫn có thể mở trang release để tải app thủ công.";
-                showFallback(RELEASE_PAGE_URL);
+                messageEl.textContent = "Bấm nút bên dưới để mở trang tải.";
+                showDownload(RELEASE_PAGE_URL);
             });
     </script>
 </body>
