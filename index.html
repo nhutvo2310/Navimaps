@@ -89,11 +89,11 @@
     <main class="card">
         <div class="badge">Navimaps S3 240</div>
         <h1>Đang tìm bản app mới nhất</h1>
-        <p id="message">Vui lòng chờ một chút, hệ thống đang lấy file APK mới nhất từ <code>Sever</code>.</p>
-        <div class="status" id="status">Đang kết nối sever...</div>
+        <p id="message">Vui lòng chờ một chút, hệ thống đang lấy file APK mới nhất.</p>
+        <div class="status" id="status">Đang kết nối GitHub...</div>
         <div class="actions" id="actions">
             <a class="primary" id="downloadLink" href="https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240">Tải app</a>
-            <a class="secondary" href="https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240">Mở trang tải</a>
+            <a class="secondary" href="https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240">Mở trang</a>
         </div>
     </main>
 
@@ -126,7 +126,7 @@
                 );
 
                 if (apkAssets.length === 0) {
-                    statusEl.textContent = "Không tìm thấy file APK trong release này.";
+                    statusEl.textContent = "Không tìm thấy file APK.";
                     messageEl.textContent = "Trang release sẽ được mở để bạn chọn file thủ công.";
                     showFallback(RELEASE_PAGE_URL);
                     window.location.replace(RELEASE_PAGE_URL);
@@ -148,7 +148,7 @@
             .catch(error => {
                 console.error("Navimaps redirect error:", error);
                 statusEl.textContent = "Không thể tự động lấy bản mới nhất.";
-                messageEl.textContent = "Bạn vẫn có thể mở trang để tải app thủ công.";
+                messageEl.textContent = "Bạn vẫn có thể mở trang release để tải app thủ công.";
                 showFallback(RELEASE_PAGE_URL);
             });
     </script>
