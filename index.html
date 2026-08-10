@@ -1,63 +1,25 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đang tải Navimaps...</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 50px;
-            background-color: #f4f4f9;
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h2 { color: #007bff; }
-        p { color: #555; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Đang kết nối đến máy chủ...</h2>
-        <p>Đang tải bản cài đặt APK mới nhất cho bạn...</p>
-    </div>
+<script>
+    const GITHUB_API_URL = "https://api.github.com/repos/nhutvo2310/Navimaps/releases/tags/Navimaps_s3_240";
 
-    <script>
-        const GITHUB_API_URL = "https://api.github.com/repos/nhutvo2310/Navimaps/releases/latest";
+    fetch(GITHUB_API_URL)
+        .then(response => {
+            if (!response.ok) throw new Error("Không thể lấy dữ liệu từ GitHub");
+            return response.json();
+        })
+        .then(data => {
+            const apkAssets = data.assets.filter(asset =>
+                asset.name.toLowerCase().endsWith(".apk")
+            );
 
-        fetch(GITHUB_API_URL)
-            .then(response => {
-                if (!response.ok) throw new Error("Không thể lấy dữ liệu từ GitHub");
-                return response.json();
-            })
-            .then(data => {
-                // 1. Lọc ra tất cả các file có đuôi .apk
-                const apkAssets = data.assets.filter(asset => asset.name.endsWith('.apk'));
-                
-                if (apkAssets.length > 0) {
-                    // 2. Sắp xếp các file APK theo thời gian tạo (updated_at) giảm dần -> File mới nhất sẽ lên đầu
-                    apkAssets.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-                    
-                    // 3. Lấy file APK mới nhất vừa upload
-                    const latestApk = apkAssets[0];
-                    
-                    // Tự động tải file APK mới nhất (ví dụ: v1.2.8)
-                    window.location.href = latestApk.browser_download_url;
-                } else {
-                    window.location.href = data.html_url;
-                }
-            })
-            .catch(error => {
-                console.error("Lỗi:", error);
-                window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/latest";
-            });
-    </script>
-</body>
-</html>
+            if (apkAssets.length > 0) {
+                apkAssets.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                window.location.href = apkAssets[0].browser_download_url;
+            } else {
+                window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240";
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi:", error);
+            window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240";
+        });
+</script>
