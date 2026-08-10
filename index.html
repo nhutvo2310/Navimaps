@@ -1,25 +1,156 @@
-<script>
-    const GITHUB_API_URL = "https://api.github.com/repos/nhutvo2310/Navimaps/releases/tags/Navimaps_s3_240";
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đang tải Navimaps...</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: linear-gradient(180deg, #eef6ff 0%, #f9fbff 100%);
+            --card: #ffffff;
+            --text: #12324a;
+            --muted: #5d7285;
+            --accent: #0f7ae5;
+            --border: rgba(15, 122, 229, 0.12);
+            --shadow: 0 18px 40px rgba(18, 50, 74, 0.12);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .card {
+            width: min(560px, 100%);
+            padding: 32px 28px;
+            border-radius: 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .badge {
+            display: inline-block;
+            margin-bottom: 14px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(15, 122, 229, 0.08);
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        h1 {
+            margin: 0 0 10px;
+            font-size: clamp(28px, 4vw, 38px);
+            line-height: 1.1;
+        }
+        p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .status {
+            margin-top: 22px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+        .actions {
+            margin-top: 24px;
+            display: none;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .actions a {
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        .primary {
+            background: var(--accent);
+            color: #ffffff;
+        }
+        .secondary {
+            background: #edf4fb;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <div class="badge">Navimaps S3 240</div>
+        <h1>Đang tìm bản app mới nhất</h1>
+        <p id="message">Vui lòng chờ một chút, hệ thống đang lấy file APK mới nhất từ <code>Sever</code>.</p>
+        <div class="status" id="status">Đang kết nối sever...</div>
+        <div class="actions" id="actions">
+            <a class="primary" id="downloadLink" href="https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240">Tải app</a>
+            <a class="secondary" href="https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240">Mở trang tải</a>
+        </div>
+    </main>
 
-    fetch(GITHUB_API_URL)
-        .then(response => {
-            if (!response.ok) throw new Error("Không thể lấy dữ liệu từ GitHub");
-            return response.json();
-        })
-        .then(data => {
-            const apkAssets = data.assets.filter(asset =>
-                asset.name.toLowerCase().endsWith(".apk")
-            );
+    <script>
+        const RELEASE_PAGE_URL = "https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240";
+        const GITHUB_API_URL = "https://api.github.com/repos/nhutvo2310/Navimaps/releases/tags/Navimaps_s3_240";
 
-            if (apkAssets.length > 0) {
-                apkAssets.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-                window.location.href = apkAssets[0].browser_download_url;
-            } else {
-                window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240";
-            }
+        const statusEl = document.getElementById("status");
+        const messageEl = document.getElementById("message");
+        const actionsEl = document.getElementById("actions");
+        const downloadLinkEl = document.getElementById("downloadLink");
+
+        function showFallback(downloadUrl) {
+            if (downloadUrl) downloadLinkEl.href = downloadUrl;
+            actionsEl.style.display = "flex";
+        }
+
+        fetch(GITHUB_API_URL, {
+            headers: { "Accept": "application/vnd.github+json" }
         })
-        .catch(error => {
-            console.error("Lỗi:", error);
-            window.location.href = "https://github.com/nhutvo2310/Navimaps/releases/tag/Navimaps_s3_240";
-        });
-</script>
+            .then(response => {
+                if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                const apkAssets = (data.assets || []).filter(asset =>
+                    asset &&
+                    typeof asset.name === "string" &&
+                    asset.name.toLowerCase().endsWith(".apk")
+                );
+
+                if (apkAssets.length === 0) {
+                    statusEl.textContent = "Không tìm thấy file APK trong release này.";
+                    messageEl.textContent = "Trang release sẽ được mở để bạn chọn file thủ công.";
+                    showFallback(RELEASE_PAGE_URL);
+                    window.location.replace(RELEASE_PAGE_URL);
+                    return;
+                }
+
+                apkAssets.sort((a, b) => {
+                    const timeA = new Date(a.updated_at || a.created_at || 0).getTime();
+                    const timeB = new Date(b.updated_at || b.created_at || 0).getTime();
+                    return timeB - timeA;
+                });
+
+                const latestApk = apkAssets[0];
+                statusEl.textContent = `Đang chuyển tới ${latestApk.name}...`;
+                messageEl.textContent = "Nếu điện thoại không tự tải, bạn có thể bấm nút tải app bên dưới.";
+                showFallback(latestApk.browser_download_url);
+                window.location.replace(latestApk.browser_download_url);
+            })
+            .catch(error => {
+                console.error("Navimaps redirect error:", error);
+                statusEl.textContent = "Không thể tự động lấy bản mới nhất.";
+                messageEl.textContent = "Bạn vẫn có thể mở trang để tải app thủ công.";
+                showFallback(RELEASE_PAGE_URL);
+            });
+    </script>
+</body>
+</html>
