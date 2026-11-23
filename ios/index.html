@@ -2,115 +2,13 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0f172a">
-    <title>Navimaps cho iPhone</title>
-    <meta name="description" content="Tải và cài Navimaps trên iPhone bằng SideInstaller hoặc SideStore với Apple ID của chính bạn.">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="refresh" content="0; url=https://navimapsios.github.io/">
+    <link rel="canonical" href="https://navimapsios.github.io/">
+    <title>Navimaps iOS</title>
+    <script>window.location.replace("https://navimapsios.github.io/");</script>
 </head>
 <body>
-    <main class="page-shell">
-        <section class="hero" aria-labelledby="page-title">
-            <div class="app-icon" aria-hidden="true">
-                <svg viewBox="0 0 64 64" role="img">
-                    <path d="M32 5 50 50 32 41 14 50 32 5Z" fill="currentColor" opacity=".22"/>
-                    <path d="M32 8 45 43 32 36 19 43 32 8Z" fill="currentColor"/>
-                    <circle cx="32" cy="32" r="4" fill="white"/>
-                </svg>
-            </div>
-            <div>
-                <p class="eyebrow">NAVIMAPS IOS</p>
-                <h1 id="page-title">Navimaps cho iPhone</h1>
-                <p class="lead">Tải IPA mới nhất và chuyển sang SideInstaller để ký bằng Apple ID của chính bạn.</p>
-            </div>
-        </section>
-
-        <section class="release-card" aria-live="polite">
-            <div class="release-meta">
-                <span class="status-dot" id="statusDot"></span>
-                <div>
-                    <p class="label">Phiên bản hiện tại</p>
-                    <p class="release-version" id="releaseVersion">Đang kiểm tra…</p>
-                    <p class="release-note" id="releaseStatus">Đang tìm bản phát hành iOS hợp lệ.</p>
-                </div>
-            </div>
-            <div class="actions">
-                <a class="button primary disabled" id="installButton" href="#" aria-disabled="true">Cài đặt Navimaps</a>
-                <a class="button secondary disabled" id="downloadButton" href="#" aria-disabled="true">Tải IPA</a>
-            </div>
-            <p class="small" id="releaseSource"></p>
-        </section>
-
-        <section class="notice warning">
-            <strong>Apple ID miễn phí có thời hạn ký 7 ngày.</strong>
-            <span>SideStore có thể làm mới chữ ký khi được thiết lập đúng. Safari không thể tự cài một IPA chưa được ký cho thiết bị của bạn.</span>
-        </section>
-
-        <section class="grid two-columns">
-            <article class="card">
-                <p class="step-number">01</p>
-                <h2>Thiết lập SideInstaller</h2>
-                <p>Trên iOS 27 trở lên, SideInstaller hiện hỗ trợ thiết lập trực tiếp trên iPhone. iOS 26 cần tạo pairing file một lần trên máy tính theo hướng dẫn của SideInstaller. Không dùng mục Legacy Enterprise certificates. Hãy dùng luồng tự ký bằng Apple ID của chính bạn.</p>
-                <a class="text-link" href="https://sideinstaller.net/install.html" target="_blank" rel="noopener noreferrer">Mở trang cài SideInstaller →</a>
-            </article>
-
-            <article class="card">
-                <p class="step-number">02</p>
-                <h2>Cài Navimaps</h2>
-                <p>Sau khi SideInstaller đã hoạt động, quay lại trang này và nhấn <strong>Cài đặt Navimaps</strong>. SideInstaller sẽ nhận URL IPA, tải ứng dụng và cho bạn ký bằng Apple ID trên thiết bị.</p>
-            </article>
-
-            <article class="card">
-                <p class="step-number">03</p>
-                <h2>Dùng SideStore để làm mới</h2>
-                <p>SideStore ký ứng dụng bằng chứng chỉ phát triển cá nhân và có thể làm mới ứng dụng trước khi thời hạn 7 ngày kết thúc.</p>
-                <a class="text-link" href="https://docs.sidestore.io/docs/installation/install" target="_blank" rel="noopener noreferrer">Hướng dẫn SideStore →</a>
-            </article>
-
-            <article class="card">
-                <p class="step-number">04</p>
-                <h2>Cập nhật Navimaps</h2>
-                <p>Khi có phiên bản mới, mở lại trang này. Website tự đọc release mới nhất có tag dạng <code>ios-vX.Y.Z</code> và đúng file <code>Navimaps.ipa</code>.</p>
-            </article>
-        </section>
-
-        <section class="card compatibility">
-            <h2>Yêu cầu theo phiên bản iOS</h2>
-            <div class="compat-row">
-                <strong>iOS 27+</strong>
-                <span>SideInstaller có thể tự ghép nối trên thiết bị, không cần máy tính cho bước pairing.</span>
-            </div>
-            <div class="compat-row">
-                <strong>iOS 26.4–26.7</strong>
-                <span>Cần remote pairing file được tạo một lần trên máy tính.</span>
-            </div>
-            <div class="compat-row">
-                <strong>iOS 17.4–26.3</strong>
-                <span>Cần pairing file được tạo một lần trên máy tính.</span>
-            </div>
-            <div class="compat-row">
-                <strong>iOS 17.0–17.3</strong>
-                <span>Navimaps có deployment target iOS 17.0, nhưng SideInstaller hiện không hỗ trợ nhóm phiên bản này. Hãy dùng một công cụ ký tương thích khác.</span>
-            </div>
-        </section>
-
-        <section class="card limits">
-            <h2>Giới hạn khi dùng Apple ID miễn phí</h2>
-            <ul>
-                <li>Provisioning profile thường hết hạn sau 7 ngày và ứng dụng cần được ký/làm mới lại.</li>
-                <li>Một Personal Team miễn phí có giới hạn số App ID và số ứng dụng cài cùng lúc trên thiết bị.</li>
-                <li>Navimaps có Share Extension, nên quá trình ký có thể sử dụng thêm một App ID cho extension.</li>
-                <li>Mỗi người dùng tự ký bằng Apple ID của họ. Website này không yêu cầu và không nhận Apple ID.</li>
-            </ul>
-        </section>
-
-        <footer>
-            <p>Navimaps · Phân phối IPA để người dùng tự ký trên iPhone.</p>
-            <button id="retryButton" type="button">Kiểm tra lại phiên bản</button>
-        </footer>
-    </main>
-
-    <script src="app.js" defer></script>
+    <p>Trang Navimaps iOS đã chuyển sang <a href="https://navimapsios.github.io/">https://navimapsios.github.io/</a>.</p>
 </body>
 </html>
-
