@@ -15,7 +15,6 @@ const statusDot = document.getElementById("statusDot");
 const installButton = document.getElementById("installButton");
 const downloadButton = document.getElementById("downloadButton");
 const retryButton = document.getElementById("retryButton");
-const privateRepoNotice = document.getElementById("privateRepoNotice");
 
 function compareVersions(a, b) {
     for (let index = 0; index < 3; index += 1) {
@@ -151,8 +150,6 @@ async function loadLatestRelease({ ignoreCache = false } = {}) {
         }
     }
 
-    let privateRepoUnavailable = false;
-
     try {
         const privateCandidate = await fetchReleasePages(PRIVATE_RELEASES_API);
         if (privateCandidate) {
@@ -163,14 +160,11 @@ async function loadLatestRelease({ ignoreCache = false } = {}) {
                 "Release từ Navimaps-iOS",
                 privateCandidate.release.tag_name
             );
-            privateRepoNotice.hidden = true;
             return;
         }
-    } catch (error) {
-        privateRepoUnavailable = error.status === 404 || error.status === 403;
+    } catch {
+        // Fall back to the public release mirror when the private repository is unavailable.
     }
-
-    privateRepoNotice.hidden = !privateRepoUnavailable;
 
     try {
         const publicCandidate = await fetchReleasePages(PUBLIC_RELEASES_API);
